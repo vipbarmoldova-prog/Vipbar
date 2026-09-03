@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VIP Cocktail Catering Bar - bar mobil cu show flairing, Moldova</title>
 <meta name="description" content="Bar mobil cu barmani, show flairing si cocktailuri pentru nunti, cumatrii, banchete si evenimente corporate. Ne deplasam oriunde pe teritoriul Republicii Moldova.">
+<link rel="icon" type="image/png" href="assets/img/logo.png?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -441,12 +442,17 @@ details.prev summary:hover{color:var(--cream)}
 
 /* ============ BUTOANE / FOOTER ============ */
 .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.btns-col{flex-direction:column;align-items:stretch}
+.btns-row{display:flex;gap:10px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;
   padding:14px 26px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer;
   border:1px solid var(--line-2);background:none;color:var(--cream);font-family:inherit;transition:.4s var(--ease)}
 .btn:hover{border-color:var(--cream)}
+.btn svg{width:16px;height:16px;flex:0 0 auto}
 .btn-solid{background:var(--amber);color:#140d05;border-color:var(--amber);font-weight:600}
 .btn-solid:hover{background:var(--amber-lite);border-color:var(--amber-lite);transform:translateY(-1px)}
+.btn-viber{background:linear-gradient(135deg,#9B6DF0,#665CAC);border-color:transparent;color:#fff;font-weight:600}
+.btn-viber:hover{background:linear-gradient(135deg,#AC82F2,#7360F2);border-color:transparent;transform:translateY(-1px)}
 footer{background:var(--ink);padding:76px 0 36px;border-top:1px solid var(--line)}
 .foot{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:48px;align-items:start}
 .foot img{width:160px;margin-bottom:18px}
@@ -807,10 +813,20 @@ footer{background:var(--ink);padding:76px 0 36px;border-top:1px solid var(--line
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg><span data-ru="Шоу флейринг">Show flairing</span></li>
         </ul>
 
-        <div class="btns">
-          <a class="btn btn-solid" id="waBtn" target="_blank" rel="noopener" style="flex:1" data-ru="Отправить в WhatsApp">Trimite pe WhatsApp</a>
-          <button class="btn" id="copyBtn" type="button" data-ru="Копировать">Copiază</button>
+        <div class="btns btns-col">
+          <a class="btn btn-solid" id="waBtn" target="_blank" rel="noopener" data-ru="Отправить в WhatsApp">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7 3 3 6.6 3 11c0 2.3 1.1 4.4 3 5.8L5 21l4.4-1.7c.8.2 1.7.3 2.6.3 5 0 9-3.6 9-8.6S17 3 12 3Z"/></svg>
+            Trimite pe WhatsApp
+          </a>
+          <div class="btns-row">
+            <a class="btn btn-viber" id="viberBtn" href="viber://chat?number=%2B37379058256" target="_blank" rel="noopener" style="flex:1" data-ru="Viber">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7 3 3 6.6 3 11c0 2.3 1.1 4.4 3 5.8L5 21l4.4-1.7c.8.2 1.7.3 2.6.3 5 0 9-3.6 9-8.6S17 3 12 3Z"/></svg>
+              Viber
+            </a>
+            <button class="btn" id="copyBtn" type="button" style="flex:1" data-ru="Копировать">Copiază</button>
+          </div>
         </div>
+        <p class="res-fine" id="viberNote" data-ru="В Viber сообщение не вставляется автоматически, сначала нажми «Копировать», потом вставь в чат.">Pe Viber mesajul nu se completează automat, apeși întâi „Copiază”, apoi lipești în chat.</p>
 
         <details class="prev">
           <summary data-ru="Посмотреть сообщение">Vezi mesajul care se trimite</summary>
@@ -954,6 +970,7 @@ footer{background:var(--ink);padding:76px 0 36px;border-top:1px solid var(--line
       <div>
         <h4 data-ru="Контакты">Contact</h4>
         <a href="tel:+37379058256">079 058 256</a>
+        <a href="viber://chat?number=%2B37379058256">Viber</a>
         <a href="mailto:vipbarmoldova@mail.ru">vipbarmoldova@mail.ru</a>
       </div>
       <div>
