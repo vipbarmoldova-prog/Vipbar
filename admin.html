@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Cabinet — VIP Cocktail Catering Bar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@240..800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="supabase-config.js"></script>
+<style>
+:root{
+  --ink:#08070a; --ink-2:#0c0c10; --panel:#121319; --panel-2:#171922;
+  --line:rgba(236,238,244,.12); --line-2:rgba(236,238,244,.26);
+  --cream:#F2EDE6; --smoke:#98A2B0; --amber:#E8913A; --amber-lite:#FFC06B;
+  --ease:cubic-bezier(.2,.7,.2,1); --good:#6FCF97; --bad:#E86A5C;
+  --sbw:252px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ink);color:var(--cream);
+  font-family:"Instrument Sans",sans-serif;font-size:15px;line-height:1.5;
+  background-image:radial-gradient(680px 420px at 100% -6%,rgba(232,145,58,.10),transparent 60%),
+    radial-gradient(520px 360px at -6% 100%,rgba(232,145,58,.06),transparent 60%)}
+h1,h2,h3{font-family:"Archivo",sans-serif;font-variation-settings:'wdth' 108,'wght' 340;margin:0}
+input,textarea{font-family:inherit;font-size:14px;background:var(--ink-2);color:var(--cream);
+  border:1px solid var(--line);border-radius:9px;padding:11px 13px;width:100%;outline:none;transition:.2s var(--ease)}
+input::placeholder,textarea::placeholder{color:var(--smoke);opacity:.6}
+input:focus,textarea:focus{border-color:var(--amber);box-shadow:0 0 0 3px rgba(232,145,58,.14)}
+label{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--smoke);margin:0 0 6px}
+button{font-family:inherit;cursor:pointer;border:0;transition:.25s var(--ease)}
+
+/* butoane cu accent gradient, folosite peste tot in cabinet */
+.btn,#loginBtn{background:linear-gradient(135deg,var(--amber-lite),var(--amber) 60%);
+  color:#1a1006;font-weight:700;padding:12px 24px;font-size:14px;border-radius:100px;
+  box-shadow:0 8px 20px -8px rgba(232,145,58,.6);letter-spacing:.01em}
+.btn:hover,#loginBtn:hover{filter:brightness(1.08);box-shadow:0 10px 26px -8px rgba(232,145,58,.8);transform:translateY(-1px)}
+.btn:active,#loginBtn:active{transform:translateY(0) scale(.98)}
+.btn:disabled{opacity:.5;cursor:default;transform:none;box-shadow:none}
+.btn-ghost{background:transparent;color:var(--smoke);border:1px solid var(--line);padding:9px 18px;
+  font-size:13px;border-radius:100px}
+.btn-ghost:hover{color:var(--cream);border-color:var(--line-2);background:var(--panel-2)}
+.btn-danger{background:transparent;color:var(--bad);border:1px solid rgba(232,106,92,.4);padding:7px 14px;
+  font-size:12.5px;border-radius:100px}
+.btn-danger:hover{background:rgba(232,106,92,.12)}
+
+/* ---------- login: card cu bordura gradient (in stil uiverse), fara alte campuri ---------- */
+#login{min-height:100svh;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-card{width:100%;max-width:380px;padding:38px 32px;border-radius:20px;
+  background:
+    linear-gradient(var(--panel),var(--panel)) padding-box,
+    linear-gradient(150deg,rgba(255,192,107,.9),rgba(232,145,58,.25) 40%,transparent 65%,rgba(255,192,107,.55)) border-box;
+  border:1px solid transparent;
+  box-shadow:0 40px 90px -40px rgba(0,0,0,.85)}
+.login-logo{width:52px;opacity:.96;margin-bottom:18px}
+.login-card h1{font-size:23px;margin-bottom:6px}
+.login-card p{color:var(--smoke);font-size:13px;margin:0 0 26px}
+.login-card .field{margin-bottom:16px}
+#loginErr{color:var(--bad);font-size:13px;margin:14px 0 0;display:none}
+#loginBtn{width:100%;margin-top:8px}
+
+/* ---------- structura cu meniu lateral ---------- */
+#app{display:none}
+.shell{display:flex;min-height:100svh}
+.sidebar{width:var(--sbw);flex:0 0 var(--sbw);background:var(--panel);border-right:1px solid var(--line);
+  display:flex;flex-direction:column;padding:22px 16px;position:sticky;top:0;height:100svh}
+.brand{display:flex;align-items:center;gap:11px;padding:6px 8px 22px;border-bottom:1px solid var(--line);margin-bottom:18px}
+.brand img{width:34px;opacity:.96}
+.brand h1{font-size:13.5px;line-height:1.25}
+.brand span{font-size:11px;color:var(--smoke)}
+.nav{display:flex;flex-direction:column;gap:4px}
+.nav button{display:flex;align-items:center;gap:11px;background:transparent;color:var(--smoke);
+  border:1px solid transparent;border-radius:11px;padding:11px 13px;font-size:13.5px;text-align:left;width:100%}
+.nav button svg{width:17px;height:17px;flex:0 0 auto;opacity:.85}
+.nav button:hover{background:var(--panel-2);color:var(--cream)}
+.nav button.on{background:linear-gradient(135deg,var(--amber-lite),var(--amber) 65%);color:#1a1006;
+  box-shadow:0 8px 18px -10px rgba(232,145,58,.7)}
+.nav button.on svg{opacity:1}
+.sidebar-foot{margin-top:auto;padding-top:16px;border-top:1px solid var(--line)}
+#whoami{font-size:11.5px;color:var(--smoke);padding:0 8px 12px;word-break:break-all}
+.sidebar-foot .btn-ghost{width:100%}
+
+.content{flex:1;min-width:0}
+.wrap{max-width:900px;margin:0 auto;padding:40px clamp(18px,3vw,44px) 130px}
+.page-head{margin-bottom:26px}
+.page-head h2{font-size:22px}
+.pane{display:none}
+.pane.on{display:block}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:16px;
+  transition:border-color .25s var(--ease)}
+.card:hover{border-color:var(--line-2)}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:12px}
+.card-head h3{font-size:15px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr}}
+
+.items{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+.item-row{display:grid;grid-template-columns:1fr 90px 34px;gap:8px;align-items:center}
+.item-row input:last-of-type{text-align:center}
+.item-row .rm{width:34px;height:34px;background:transparent;color:var(--smoke);border:1px solid var(--line);
+  border-radius:9px;font-size:16px;line-height:1}
+.item-row .rm:hover{color:var(--bad);border-color:var(--bad)}
+.add-row{margin-top:10px;background:transparent;color:var(--amber-lite);border:1px dashed var(--line-2);
+  border-radius:9px;padding:9px 14px;font-size:13px;width:100%}
+.add-row:hover{border-color:var(--amber);background:rgba(232,145,58,.06)}
+
+.tier-row{display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:14px;margin-bottom:14px}
+@media(max-width:600px){.tier-row{grid-template-columns:1fr}}
+
+.gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.gal-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+  transition:border-color .25s var(--ease)}
+.gal-card:hover{border-color:var(--line-2)}
+.gal-card img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--ink-2)}
+.gal-card .body{padding:13px}
+.gal-card .row{display:flex;gap:8px;margin-top:9px}
+.gal-card label.upl{flex:1;text-align:center;background:var(--panel-2);border:1px solid var(--line);
+  border-radius:8px;padding:8px;font-size:12px;color:var(--smoke);cursor:pointer}
+.gal-card label.upl:hover{color:var(--cream);border-color:var(--line-2)}
+.gal-card input[type=file]{display:none}
+.gal-add{border:1px dashed var(--line-2);display:flex;align-items:center;justify-content:center;
+  min-height:180px;color:var(--amber-lite);font-size:14px;cursor:pointer;flex-direction:column;gap:6px}
+.gal-add:hover{border-color:var(--amber);background:rgba(232,145,58,.05)}
+.gal-add input{display:none}
+
+#saveBar{position:fixed;left:var(--sbw);right:0;bottom:0;z-index:6;background:rgba(8,7,10,.94);
+  backdrop-filter:blur(10px);border-top:1px solid var(--line);
+  padding:14px clamp(18px,3vw,44px);display:flex;align-items:center;justify-content:flex-end;gap:14px}
+#saveMsg{font-size:12.5px;color:var(--smoke);margin-right:auto}
+#saveMsg.ok{color:var(--good)}
+#saveMsg.err{color:var(--bad)}
+.hint{color:var(--smoke);font-size:12.5px;margin:0 0 18px}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber-lite);margin-bottom:6px}
+
+@media(max-width:860px){
+  :root{--sbw:0px}
+  .shell{flex-direction:column}
+  .sidebar{position:relative;width:100%;flex:none;height:auto;padding:16px;flex-direction:row;
+    align-items:center;flex-wrap:wrap;gap:10px}
+  .brand{border-bottom:0;margin-bottom:0;padding:0;flex:1 0 auto}
+  .nav{flex-direction:row;flex-wrap:nowrap;flex:1 1 100%;order:3;gap:6px}
+  .nav button{width:auto;flex:1 1 0;min-width:0;flex-direction:column;justify-content:center;
+    gap:5px;padding:10px 4px;border-radius:12px}
+  .nav button svg{width:18px;height:18px}
+  .nav button span{display:block;font-size:10px;letter-spacing:.01em;white-space:nowrap;
+    overflow:hidden;text-overflow:ellipsis;max-width:100%}
+  .sidebar-foot{margin-top:0;padding-top:0;border-top:0;display:flex;align-items:center;gap:10px;order:2}
+  #whoami{display:none}
+  #saveBar{left:0;padding:12px 16px}
+  .wrap{padding:26px 16px 120px}
+}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div class="login-card">
+    <img class="login-logo" src="assets/img/logo.png" alt="">
+    <h1>Cabinet personal</h1>
+    <p>VIP Cocktail Catering Bar — autentificare</p>
+    <div class="field"><label>Email</label><input id="lEmail" type="email" autocomplete="username" placeholder="email@exemplu.com"></div>
+    <div class="field"><label>Parolă</label><input id="lPass" type="password" autocomplete="current-password" placeholder="••••••••"></div>
+    <button id="loginBtn">Intră în cabinet</button>
+    <p id="loginErr"></p>
+  </div>
+</div>
+
+<div id="app">
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="assets/img/logo.png" alt="">
+        <div><h1>Catering Vip Bar</h1><span>Cabinet</span></div>
+      </div>
+      <nav class="nav">
+        <button data-t="oferte" class="on" title="Oferte">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 12 12 20 4 12V4h8z"/><circle cx="8.5" cy="8.5" r="1.4" fill="currentColor" stroke="none"/></svg>
+          <span>Oferte</span>
+        </button>
+        <button data-t="torta" title="Torta de shoturi">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 21h16M5 21v-6a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v6M9 12V8a3 3 0 0 1 6 0v4M12 5V3"/></svg>
+          <span>Torta de shoturi</span>
+        </button>
+        <button data-t="preturi" title="Prețuri">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v20M17 6H9.5a3 3 0 0 0 0 6h5a3 3 0 0 1 0 6H6"/></svg>
+          <span>Prețuri</span>
+        </button>
+        <button data-t="galerie" title="Galerie">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="m3 17 5.5-5.5a2 2 0 0 1 2.8 0L17 17M14.5 14.5 16 13a2 2 0 0 1 2.8 0L21 15"/></svg>
+          <span>Galerie</span>
+        </button>
+      </nav>
+      <div class="sidebar-foot">
+        <div id="whoami"></div>
+        <button class="btn-ghost" id="logoutBtn">Ieșire</button>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="wrap">
+        <div class="pane on" id="pane-oferte">
+          <div class="page-head"><div class="eyebrow">Cabinet</div><h2>Oferte</h2></div>
+          <p class="hint">Cardurile de ofertă de pe site, cu numărul de cocktailuri și cocktailurile incluse.</p>
+          <div id="offersList"></div>
+          <button class="btn-ghost" id="addOffer" style="width:100%;margin-top:6px">+ Adaugă ofertă nouă</button>
+        </div>
+
+        <div class="pane" id="pane-torta">
+          <div class="page-head"><div class="eyebrow">Cabinet</div><h2>Torta de shoturi</h2></div>
+          <p class="hint">Cele 3 praguri fixe de pe site (100 / 171 / 200 de shoturi) — se pot edita cantitățile, prețurile și textul de sub ele.</p>
+          <div class="card">
+            <div class="grid2">
+              <div><label>Preț per unitate (lei)</label><input id="tUnit" type="number"></div>
+              <div><label>Nr. feluri de shoturi</label><input id="tFlavors" type="number"></div>
+            </div>
+            <div style="margin-top:18px" id="tortaTiersEdit"></div>
+          </div>
+        </div>
+
+        <div class="pane" id="pane-preturi">
+          <div class="page-head"><div class="eyebrow">Cabinet</div><h2>Prețuri</h2></div>
+          <p class="hint">Prețurile folosite în calculator și în textele de pe site.</p>
+          <div class="card grid2">
+            <div><label>Preț per cocktail, peste ofertele standard (lei)</label><input id="pPerUnit" type="number"></div>
+            <div><label>Preț cocktail suplimentar de rezervă (lei)</label><input id="pRezerva" type="number"></div>
+            <div><label>Avans rezervare dată (lei)</label><input id="pAvans" type="number"></div>
+            <div><label>Taxă deplasare (lei/km dus-întors)</label><input id="pKm" type="number"></div>
+          </div>
+        </div>
+
+        <div class="pane" id="pane-galerie">
+          <div class="page-head"><div class="eyebrow">Cabinet</div><h2>Galerie</h2></div>
+          <p class="hint">Pozele din secțiunea „Cum arată barul în lucru". Poți schimba descrierea, înlocui sau șterge o poză, ori adăuga una nouă.</p>
+          <div class="gal-grid" id="galGrid"></div>
+        </div>
+      </div>
+
+      <div id="saveBar">
+        <span id="saveMsg"></span>
+        <button class="btn" id="saveBtn">Salvează modificările</button>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+if(!(window.SUPABASE_URL && window.SUPABASE_ANON_KEY && window.supabase)){
+  document.body.innerHTML='<div style="min-height:100svh;display:flex;align-items:center;justify-content:center;'
+    +'background:#08070a;color:#F2EDE6;font-family:sans-serif;text-align:center;padding:30px">'
+    +'Cabinetul nu e conectat încă la Supabase.<br>Lipsesc cheile din supabase-config.js.</div>';
+  throw new Error("supabase config lipsă");
+}
+const sb=window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+const F=id=>document.getElementById(id);
+let state=null; // {offers, torta, pricing, gallery}
+
+/* ---------- auth ---------- */
+F("loginBtn").onclick=async()=>{
+  F("loginErr").style.display="none";
+  const email=F("lEmail").value.trim(), password=F("lPass").value;
+  if(!email||!password) return;
+  F("loginBtn").disabled=true; F("loginBtn").textContent="Se verifică...";
+  const {error}=await sb.auth.signInWithPassword({email,password});
+  F("loginBtn").disabled=false; F("loginBtn").textContent="Intră în cabinet";
+  if(error){ F("loginErr").textContent="Email sau parolă greșită."; F("loginErr").style.display="block"; return; }
+  await boot();
+};
+["lEmail","lPass"].forEach(id=>F(id).addEventListener("keydown",e=>{ if(e.key==="Enter") F("loginBtn").click(); }));
+F("logoutBtn").onclick=async()=>{ await sb.auth.signOut(); location.reload(); };
+
+async function checkSession(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(session){ await boot(); }
+}
+checkSession();
+
+/* ---------- incarcare date + pornire cabinet ---------- */
+async function boot(){
+  const {data:{user}}=await sb.auth.getUser();
+  F("whoami").textContent=user?user.email:"";
+  const {data,error}=await sb.from("site_content").select("data").eq("id","main").single();
+  if(error || !data){
+    alert("Nu am putut încărca datele din bază. Verifică setup-ul din supabase-setup.sql.");
+    return;
+  }
+  state=data.data;
+  state.pricing=state.pricing||{};
+  document.getElementById("login").style.display="none";
+  document.getElementById("app").style.display="block";
+  renderOffers(); renderTorta(); renderPricing(); renderGallery();
+}
+
+/* ---------- tab-uri ---------- */
+document.querySelectorAll(".nav button").forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("on",x===b));
+    document.querySelectorAll(".pane").forEach(p=>p.classList.toggle("on",p.id==="pane-"+b.dataset.t));
+  };
+});
+
+/* ---------- oferte ---------- */
+function renderOffers(){
+  F("offersList").innerHTML=state.offers.map((o,i)=>`
+    <div class="card" data-i="${i}">
+      <div class="card-head">
+        <h3>Oferta ${o.n}</h3>
+        <button class="btn-danger" data-del-offer="${i}">Șterge oferta</button>
+      </div>
+      <div class="grid2">
+        <div><label>Nr. cocktailuri (total)</label><input type="number" data-f="qty" value="${o.qty}"></div>
+        <div><label>Preț total (lei)</label><input type="number" data-f="price" value="${o.price}"></div>
+      </div>
+      <div class="items">
+        ${Object.entries(o.items).map(([k,v])=>`
+          <div class="item-row" data-item>
+            <input type="text" data-k value="${k}" placeholder="Nume cocktail">
+            <input type="number" data-v value="${v}" placeholder="Buc">
+            <button class="rm" data-rm-item>×</button>
+          </div>`).join("")}
+      </div>
+      <button class="add-row" data-add-item>+ Adaugă cocktail în ofertă</button>
+    </div>`).join("");
+
+  F("offersList").querySelectorAll(".card").forEach(card=>{
+    const i=+card.dataset.i;
+    card.querySelector('[data-f="qty"]').oninput=e=>state.offers[i].qty=+e.target.value||0;
+    card.querySelector('[data-f="price"]').oninput=e=>state.offers[i].price=+e.target.value||0;
+    card.querySelector("[data-del-offer]").onclick=()=>{
+      if(!confirm("Ștergi complet oferta "+state.offers[i].n+"?")) return;
+      state.offers.splice(i,1); renderOffers();
+    };
+    card.querySelector("[data-add-item]").onclick=()=>{
+      const items=itemsFromCard(card); items["Cocktail nou"]=10;
+      state.offers[i].items=items; renderOffers();
+    };
+    card.querySelectorAll("[data-rm-item]").forEach(btn=>{
+      btn.onclick=()=>{
+        const row=btn.closest("[data-item]");
+        const items=itemsFromCard(card,row);
+        state.offers[i].items=items; renderOffers();
+      };
+    });
+    card.querySelectorAll('[data-k],[data-v]').forEach(inp=>{
+      inp.oninput=()=>{ state.offers[i].items=itemsFromCard(card); };
+    });
+  });
+}
+function itemsFromCard(card,skipRow){
+  const items={};
+  card.querySelectorAll("[data-item]").forEach(row=>{
+    if(row===skipRow) return;
+    const k=row.querySelector("[data-k]").value.trim();
+    const v=+row.querySelector("[data-v]").value||0;
+    if(k) items[k]=v;
+  });
+  return items;
+}
+F("addOffer").onclick=()=>{
+  const nextN=Math.max(0,...state.offers.map(o=>o.n))+1;
+  state.offers.push({n:nextN,qty:100,price:9000,items:{"Mojito":25}});
+  renderOffers();
+};
+
+/* ---------- torta ---------- */
+function renderTorta(){
+  F("tUnit").value=state.torta.unitPrice;
+  F("tFlavors").value=state.torta.flavors;
+  F("tUnit").oninput=e=>state.torta.unitPrice=+e.target.value||0;
+  F("tFlavors").oninput=e=>state.torta.flavors=+e.target.value||0;
+
+  F("tortaTiersEdit").innerHTML=state.torta.tiers.map((t,i)=>`
+    <div class="tier-row" data-i="${i}">
+      <div><label>Cantitate (buc)</label><input type="number" data-f="qty" value="${t.qty}"></div>
+      <div><label>Preț (lei)</label><input type="number" data-f="price" value="${t.price}"></div>
+      <div><label>Etichetă</label><input type="text" data-f="label" value="${t.label}"></div>
+    </div>`).join("");
+  F("tortaTiersEdit").querySelectorAll(".tier-row").forEach(row=>{
+    const i=+row.dataset.i;
+    row.querySelector('[data-f="qty"]').oninput=e=>state.torta.tiers[i].qty=+e.target.value||0;
+    row.querySelector('[data-f="price"]').oninput=e=>state.torta.tiers[i].price=+e.target.value||0;
+    row.querySelector('[data-f="label"]').oninput=e=>state.torta.tiers[i].label=e.target.value;
+  });
+}
+
+/* ---------- preturi ---------- */
+function renderPricing(){
+  F("pPerUnit").value=state.pricing.perUnit??80;
+  F("pRezerva").value=state.pricing.rezervaUnitar??85;
+  F("pAvans").value=state.pricing.avans??2000;
+  F("pKm").value=state.pricing.kmFee??10;
+  F("pPerUnit").oninput=e=>state.pricing.perUnit=+e.target.value||0;
+  F("pRezerva").oninput=e=>state.pricing.rezervaUnitar=+e.target.value||0;
+  F("pAvans").oninput=e=>state.pricing.avans=+e.target.value||0;
+  F("pKm").oninput=e=>state.pricing.kmFee=+e.target.value||0;
+}
+
+/* ---------- galerie ---------- */
+const galSrc=f=>/^https?:\/\//.test(f)?f:`assets/img/gal/${f}.jpg`;
+function renderGallery(){
+  F("galGrid").innerHTML=state.gallery.map((g,i)=>`
+    <div class="gal-card" data-i="${i}">
+      <img src="${galSrc(g.file)}" alt="">
+      <div class="body">
+        <input type="text" data-cap value="${g.caption}" placeholder="Descriere">
+        <div class="row">
+          <label class="upl">Înlocuiește poza<input type="file" accept="image/*" data-replace></label>
+          <button class="btn-danger" data-del>Șterge</button>
+        </div>
+      </div>
+    </div>`).join("")
+    + `<label class="gal-add gal-card">+ Poză nouă<input type="file" accept="image/*" id="galNewFile"></label>`;
+
+  F("galGrid").querySelectorAll(".gal-card[data-i]").forEach(card=>{
+    const i=+card.dataset.i;
+    card.querySelector("[data-cap]").oninput=e=>state.gallery[i].caption=e.target.value;
+    card.querySelector("[data-del]").onclick=()=>{
+      if(!confirm("Ștergi poza asta din galerie?")) return;
+      state.gallery.splice(i,1); renderGallery();
+    };
+    card.querySelector("[data-replace]").onchange=async e=>{
+      const file=e.target.files[0]; if(!file) return;
+      const url=await uploadImage(file);
+      if(url){ state.gallery[i].file=url; renderGallery(); }
+    };
+  });
+  F("galNewFile").onchange=async e=>{
+    const file=e.target.files[0]; if(!file) return;
+    const url=await uploadImage(file);
+    if(url){ state.gallery.push({file:url,caption:"Poză nouă"}); renderGallery(); }
+  };
+}
+async function uploadImage(file){
+  setMsg("Se încarcă poza...","");
+  const ext=(file.name.split(".").pop()||"jpg").toLowerCase();
+  const path=`gal/${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
+  const {error}=await sb.storage.from("site-images").upload(path,file,{cacheControl:"3600",upsert:false});
+  if(error){ setMsg("Poza nu s-a încărcat: "+error.message,"err"); return null; }
+  const {data}=sb.storage.from("site-images").getPublicUrl(path);
+  setMsg("Poză încărcată. Nu uita să apeși Salvează.","ok");
+  return data.publicUrl;
+}
+
+/* ---------- salvare ---------- */
+function setMsg(txt,cls){
+  const el=F("saveMsg"); el.textContent=txt; el.className=cls||"";
+}
+F("saveBtn").onclick=async()=>{
+  F("saveBtn").disabled=true; setMsg("Se salvează...","");
+  const {error}=await sb.from("site_content").update({data:state,updated_at:new Date().toISOString()}).eq("id","main");
+  F("saveBtn").disabled=false;
+  if(error){ setMsg("Eroare la salvare: "+error.message,"err"); return; }
+  setMsg("Salvat. Site-ul arată actualizarea la următoarea încărcare a paginii.","ok");
+};
+</script>
+</body>
+</html>
