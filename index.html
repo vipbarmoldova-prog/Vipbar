@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>VIP Cocktail Catering Bar - bar mobil cu show flairing, Moldova</title>
+<title>VIP Catering Bar - bar mobil cu show flairing, Moldova</title>
 <meta name="description" content="Bar mobil cu barmani, show flairing si cocktailuri pentru nunti, cumatrii, banchete si evenimente corporate. Ne deplasam oriunde pe teritoriul Republicii Moldova.">
-<link rel="icon" type="image/png" href="assets/img/logo.png?v=2">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/img/favicon-192.png">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/img/favicon-48.png">
+<link rel="apple-touch-icon" href="assets/img/favicon-512.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -453,6 +455,8 @@ details.prev summary:hover{color:var(--cream)}
 .btn-solid:hover{background:var(--amber-lite);border-color:var(--amber-lite);transform:translateY(-1px)}
 .btn-viber{background:linear-gradient(135deg,#9B6DF0,#665CAC);border-color:transparent;color:#fff;font-weight:600}
 .btn-viber:hover{background:linear-gradient(135deg,#AC82F2,#7360F2);border-color:transparent;transform:translateY(-1px)}
+.btn-whatsapp{background:linear-gradient(135deg,#2FE271,#1C9E51);border-color:transparent;color:#fff;font-weight:600}
+.btn-whatsapp:hover{background:linear-gradient(135deg,#3FF082,#25B75E);border-color:transparent;transform:translateY(-1px)}
 footer{background:var(--ink);padding:76px 0 36px;border-top:1px solid var(--line)}
 .foot{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:48px;align-items:start}
 .foot img{width:160px;margin-bottom:18px}
@@ -777,6 +781,11 @@ footer{background:var(--ink);padding:76px 0 36px;border-top:1px solid var(--line
             <span><span class="t" data-ru="Торт из шотов">Torta de shoturi</span>
             <span class="s" data-ru="4 вида слабоалкогольных шотов, на этажерке. 70 лей за штуку.">4 feluri de shoturi slab alcoolice, aranjate pe etajeră. 70 lei unitatea.</span></span>
           </label>
+          <div id="tortaQtyBlk" style="display:none;margin-top:14px">
+            <div class="blk-t" data-ru="Сколько шотов <b id=&quot;tsN&quot;>100</b>">Câte shoturi <b id="tsN">100</b></div>
+            <input type="range" id="tortaShots" min="100" max="260" step="10" value="100">
+            <div class="rng-ends"><span>100</span><span>260</span></div>
+          </div>
         </div>
 
         <div class="blk">
@@ -814,17 +823,17 @@ footer{background:var(--ink);padding:76px 0 36px;border-top:1px solid var(--line
         </ul>
 
         <div class="btns btns-col">
-          <a class="btn btn-solid" id="waBtn" target="_blank" rel="noopener" data-ru="Отправить в WhatsApp">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7 3 3 6.6 3 11c0 2.3 1.1 4.4 3 5.8L5 21l4.4-1.7c.8.2 1.7.3 2.6.3 5 0 9-3.6 9-8.6S17 3 12 3Z"/></svg>
-            Trimite pe WhatsApp
-          </a>
           <div class="btns-row">
+            <a class="btn btn-whatsapp" id="waBtn" target="_blank" rel="noopener" style="flex:1" data-ru="WhatsApp">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7 3 3 6.6 3 11c0 2.3 1.1 4.4 3 5.8L5 21l4.4-1.7c.8.2 1.7.3 2.6.3 5 0 9-3.6 9-8.6S17 3 12 3Z"/></svg>
+              WhatsApp
+            </a>
             <a class="btn btn-viber" id="viberBtn" href="viber://chat?number=%2B37379058256" target="_blank" rel="noopener" style="flex:1" data-ru="Viber">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7 3 3 6.6 3 11c0 2.3 1.1 4.4 3 5.8L5 21l4.4-1.7c.8.2 1.7.3 2.6.3 5 0 9-3.6 9-8.6S17 3 12 3Z"/></svg>
               Viber
             </a>
-            <button class="btn" id="copyBtn" type="button" style="flex:1" data-ru="Копировать">Copiază</button>
           </div>
+          <button class="btn" id="copyBtn" type="button" data-ru="Копировать">Copiază</button>
         </div>
         <p class="res-fine" id="viberNote" data-ru="В Viber сообщение не вставляется автоматически, сначала нажми «Копировать», потом вставь в чат.">Pe Viber mesajul nu se completează automat, apeși întâi „Copiază”, apoi lipești în chat.</p>
 
@@ -1096,7 +1105,6 @@ function renderTorta(){
   F("tortaChipUnit").textContent=lei(TORTA.unitPrice);
 }
 renderTorta();
-function tortaTier(n){ return (n&&n<=4)?TORTA.tiers[0]:(n===5?TORTA.tiers[1]:TORTA.tiers[2]); }
 
 /* ---------- galerie: randare din GAL, poate fi inlocuita din Supabase ----------
    fiecare intrare e fie un nume local (assets/img/gal/<nume>.jpg), fie un URL complet
@@ -1148,41 +1156,41 @@ track.addEventListener("touchend",e=>{
 },{passive:true});
 
 /* ---------- configurator ---------- */
-let guests=60, hours=5, drinks=5, drinksTouched=false, wantTorta=false, evType="Nuntă", userTouched=false;
+let guests=60, hours=5, drinks=5, drinksTouched=false, wantTorta=false, tortaShots=100, evType="Nuntă", userTouched=false;
 const suggestDrinks=h=>h<=4?3.5:h<=6?5:6.5;
 
 function calc(){
   const need=Math.round(guests*drinks);
-  const o=OFFERS.find(x=>x.qty>=need);           /* undefined = peste ofertele standard */
-  const qty=o?o.qty:Math.ceil(need/10)*10;
-  const price=o?o.price:Math.round(need*PRICING.perUnit/500)*500;
+  /* pretul e mereu calculat exact, need * pret pe unitate - nu se rotunjeste la
+     suma unui pachet fix. oferta gasita mai jos e doar ca sa arate ce cocktailuri
+     se potrivesc, nu mai da si pretul */
+  const o=OFFERS.find(x=>x.qty>=need);
+  const price=need*PRICING.perUnit;
 
   F("gN").textContent=guests;
   F("hN").textContent=hours+" "+L("ore");
   F("dN").textContent=drinks;
   F("rOffer").textContent=o?T.ofertaNr(o.n):L("ofertaComanda");
-  F("rNote").textContent=o?`${o.qty} ${L("cocktailuri")}`:T.cocktailuriPeste(qty);
+  F("rNote").textContent=`${need} ${L("cocktailuri")}`;
   F("rNeed").textContent=need+" "+L("buc");
   F("rBase").textContent=lei(price);
 
   let total=price;
-  const tt=tortaTier(o&&o.n);
   if(wantTorta){
+    const tortaPrice=tortaShots*TORTA.unitPrice;
     F("rowTorta").style.display="";
-    F("rTortaLbl").textContent=`${L("tortaDeShoturi")} (${tt.qty} ${L("buc")})`;
-    F("rTorta").textContent=lei(tt.price);
-    total+=tt.price;
+    F("rTortaLbl").textContent=`${L("tortaDeShoturi")} (${tortaShots} ${L("buc")})`;
+    F("rTorta").textContent=lei(tortaPrice);
+    total+=tortaPrice;
   } else F("rowTorta").style.display="none";
   F("rTotal").textContent=lei(total);
-  F("rFine").innerHTML=o
-    ? T.fineOffer(lei(PRICING.avans))
-    : T.fineOver(OFFERS[OFFERS.length-1].qty,PRICING.perUnit);
+  F("rFine").innerHTML=T.fineOffer(lei(PRICING.avans));
 
   cards.forEach(el=>el.classList.toggle("match",!!o&&+el.dataset.n===o.n));
   /* caruselul sare la oferta potrivita doar dupa ce clientul misca ceva, nu la incarcare */
   if(o&&userTouched){ const p=OFFERS.findIndex(x=>x.n===o.n); if(p<idx||p>idx+perView()-1) go(Math.min(p,maxIdx())); }
 
-  window.__sel={offer:o,qty,need,total,torta:wantTorta};
+  window.__sel={offer:o,need,total,torta:wantTorta,tortaShots};
   buildMsg();
 }
 
@@ -1193,7 +1201,14 @@ F("hours").addEventListener("input",e=>{
   calc();
 });
 F("drinks").addEventListener("input",e=>{userTouched=true;drinksTouched=true;drinks=+e.target.value;calc();});
-F("tortaChk").addEventListener("change",e=>{userTouched=true;wantTorta=e.target.checked;calc();});
+F("tortaChk").addEventListener("change",e=>{
+  userTouched=true; wantTorta=e.target.checked;
+  F("tortaQtyBlk").style.display=wantTorta?"":"none";
+  calc();
+});
+F("tortaShots").addEventListener("input",e=>{
+  userTouched=true; tortaShots=+e.target.value; F("tsN").textContent=tortaShots; calc();
+});
 F("evType").addEventListener("change",e=>{ if(e.target.name==="evt"){ evType=e.target.value; buildMsg(); }});
 
 /* ---------- mesajul pre-completat ---------- */
@@ -1209,9 +1224,8 @@ function buildMsg(){
   t+=`Aproximativ ${guests} invitați, ${hours} ore.\n`;
   if(venue) t+=`Locația: ${venue}.\n`;
   t+=`\n`;
-  if(s.offer) t+=`Pe site mi-a ieșit Oferta №${s.offer.n} (${s.offer.qty} cocktailuri)`;
-  else if(s.qty) t+=`Pe site mi-au ieșit ~${s.qty} cocktailuri, peste ofertele standard`;
-  if(s.qty) t+=(s.torta?`, plus torta de shoturi`:``)+`, în jur de ${lei(s.total)}.\n\n`;
+  if(s.need) t+=`Pe site mi-au ieșit ${s.need} cocktailuri`;
+  if(s.need) t+=(s.torta?`, plus torta de shoturi (${s.tortaShots} buc)`:``)+`, în jur de ${lei(s.total)}.\n\n`;
   if(extra) t+=extra+"\n\n";
   t+=`Data este liberă?`;
   if(name||phone) t+=`\n\n${name}${name&&phone?" / ":""}${phone}`;
