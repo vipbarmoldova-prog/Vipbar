@@ -1161,11 +1161,13 @@ const suggestDrinks=h=>h<=4?3.5:h<=6?5:6.5;
 
 function calc(){
   const need=Math.round(guests*drinks);
-  /* pretul e mereu calculat exact, need * pret pe unitate - nu se rotunjeste la
-     suma unui pachet fix. oferta gasita mai jos e doar ca sa arate ce cocktailuri
-     se potrivesc, nu mai da si pretul */
+  /* pretul e calculat exact, need * pretul pe unitate al pragului in care se incadreaza -
+     fiecare oferta are propriul pret/unitate (mai mic la volum mai mare, reducere reala),
+     nu un singur pret fix pentru toata lumea. peste 400 se foloseste PRICING.perUnit.
+     oferta gasita mai jos arata si ce cocktailuri se potrivesc. */
   const o=OFFERS.find(x=>x.qty>=need);
-  const price=need*PRICING.perUnit;
+  const rate=o?o.price/o.qty:PRICING.perUnit;
+  const price=Math.round(need*rate);
 
   F("gN").textContent=guests;
   F("hN").textContent=hours+" "+L("ore");
