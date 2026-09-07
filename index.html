@@ -1167,7 +1167,8 @@ function calc(){
      oferta gasita mai jos arata si ce cocktailuri se potrivesc. */
   const o=OFFERS.find(x=>x.qty>=need);
   const rate=o?o.price/o.qty:PRICING.perUnit;
-  const price=Math.round(need*rate);
+  /* comanda minima: 100 buc / 9000 lei, indiferent cat de mic e numarul real de invitati */
+  const price=Math.max(Math.round(need*rate),OFFERS[0].price);
 
   F("gN").textContent=guests;
   F("hN").textContent=hours+" "+L("ore");
