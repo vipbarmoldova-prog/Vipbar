@@ -42,6 +42,13 @@ insert into site_content (id, data) values ('main', '{
     ],
     "flavors": 4
   },
+  "piramida": {
+    "tiers": [
+      {"etaje":5,"pahare":35,"price":2000},
+      {"etaje":6,"pahare":56,"price":2400},
+      {"etaje":7,"pahare":84,"price":2800}
+    ]
+  },
   "pricing": {
     "perUnit": 80,
     "rezervaUnitar": 85,

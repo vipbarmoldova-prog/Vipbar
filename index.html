@@ -358,6 +358,11 @@ details.prev summary:hover{color:var(--cream)}
    linear-gradient(180deg,var(--ink) 0%,rgba(8,7,10,.72) 22%,rgba(8,7,10,.72) 78%,var(--ink) 100%)}
 .torta > .wrap{position:relative;z-index:2}
 .torta-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,70px);align-items:center;margin-top:48px}
+/* doua adaosuri unul langa altul: torta de shoturi si piramida din spumant */
+.addons{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,4.4vw,64px);margin-top:50px;align-items:start}
+.addon h3{font-family:"Archivo",sans-serif;font-variation-settings:'wdth' 108,'wght' 320;
+  font-size:clamp(24px,2.5vw,34px);letter-spacing:-.015em;margin:26px 0 0}
+.addon p{color:var(--smoke);font-size:15px;line-height:1.65;margin:14px 0 26px;max-width:46ch}
 .tier{display:flex;justify-content:space-between;align-items:center;gap:20px;
   padding:17px 16px 17px 0;border-bottom:1px solid var(--line);position:relative;transition:.4s var(--ease)}
 .tier:first-of-type{border-top:1px solid var(--line)}
@@ -485,6 +490,7 @@ footer{background:var(--ink);padding:76px 0 36px;border-top:1px solid var(--line
   .conf-grid{grid-template-columns:1fr}
   .conf-sum{position:relative;top:auto}
   .torta-grid{grid-template-columns:1fr}
+  .addons{grid-template-columns:1fr;gap:56px}
   .foot{grid-template-columns:1fr 1fr}
   .gal{grid-template-columns:repeat(3,1fr);gap:10px}
   .off{--pv:2}
@@ -601,7 +607,7 @@ footer{background:var(--ink);padding:76px 0 36px;border-top:1px solid var(--line
     <li><a href="#include" data-ru="Что входит">Ce include</a></li>
     <li><a href="#calcul" data-ru="Рассчитать">Calculează</a></li>
     <li><a href="#oferte" data-ru="Предложения">Oferte</a></li>
-    <li><a href="#torta" data-ru="Торт из шотов">Torta de shoturi</a></li>
+    <li><a href="#torta" data-ru="Дополнения">Adaosuri</a></li>
     <li><a href="#galerie" data-ru="Галерея">Galerie</a></li>
     <li><a href="#intrebari" data-ru="Вопросы">Întrebări</a></li>
   </ul>
@@ -621,7 +627,7 @@ footer{background:var(--ink);padding:76px 0 36px;border-top:1px solid var(--line
     <li><span>01</span><a href="#include" data-ru="Что входит">Ce include</a></li>
     <li><span>02</span><a href="#calcul" data-ru="Рассчитать">Calculează</a></li>
     <li><span>03</span><a href="#oferte" data-ru="Предложения">Oferte</a></li>
-    <li><span>04</span><a href="#torta" data-ru="Торт из шотов">Torta de shoturi</a></li>
+    <li><span>04</span><a href="#torta" data-ru="Дополнения">Adaosuri</a></li>
     <li><span>05</span><a href="#galerie" data-ru="Галерея">Galerie</a></li>
     <li><span>06</span><a href="#intrebari" data-ru="Вопросы">Întrebări</a></li>
   </ul>
@@ -786,6 +792,16 @@ footer{background:var(--ink);padding:76px 0 36px;border-top:1px solid var(--line
             <input type="range" id="tortaShots" min="100" max="260" step="10" value="100">
             <div class="rng-ends"><span>100</span><span>260</span></div>
           </div>
+
+          <label class="chk" style="margin-top:14px">
+            <input type="checkbox" id="pirChk">
+            <span><span class="t" data-ru="Пирамида из шампанского">Piramida din spumant</span>
+            <span class="s" data-ru="Пирамида из бокалов, 5-7 этажей. Шампанское в цену не входит.">Piramidă din pahare, de la 5 la 7 etaje. Spumantul nu intră în preț.</span></span>
+          </label>
+          <div id="pirQtyBlk" style="display:none;margin-top:14px">
+            <div class="blk-t" data-ru="Сколько этажей">Câte etaje</div>
+            <div class="pills" id="pirEtaje"></div>
+          </div>
         </div>
 
         <div class="blk">
@@ -805,6 +821,7 @@ footer{background:var(--ink);padding:76px 0 36px;border-top:1px solid var(--line
           <div class="res-row"><span data-ru="Необходимо коктейлей">Cocktailuri necesare</span><b id="rNeed">300 buc</b></div>
           <div class="res-row"><span data-ru="Пакет коктейлей">Pachet cocktailuri</span><b id="rBase">24 000 lei</b></div>
           <div class="res-row" id="rowTorta" style="display:none"><span id="rTortaLbl">Torta de shoturi</span><b id="rTorta">7 000 lei</b></div>
+          <div class="res-row" id="rowPir" style="display:none"><span id="rPirLbl">Piramida din spumant</span><b id="rPir">2 000 lei</b></div>
         </div>
 
         <div class="res-total">
@@ -877,14 +894,24 @@ footer{background:var(--ink);padding:76px 0 36px;border-top:1px solid var(--line
   </div>
 </section>
 
-<!-- ================= TORTA ================= -->
+<!-- ================= ADAOSURI (torta + piramida) ================= -->
 <section class="torta" id="torta">
   <div class="wrap">
-    <div class="torta-grid">
-      <div class="rv">
-        <div class="eyebrow" data-ru="Дополнительно">Adaos</div>
-        <h2 style="font-size:clamp(32px,4.4vw,56px);margin:16px 0 0" data-ru="Торт из шотов">Torta de shoturi</h2>
-        <p style="color:var(--smoke);max-width:44ch;margin:18px 0 30px"><span data-ru="Этажерка с">Etajeră cu</span> <span id="tortaFlavors">4</span> <span data-ru="видов разных слабоалкогольных шотов, устанавливается у бара. Считается по">feluri de shoturi diferite, slab alcoolice, montată lângă bar. Se calculează</span> <span id="tortaUnitTxt">70 lei</span> <span data-ru="за штуку.">unitatea.</span></p>
+    <div class="sec-head rv">
+      <div class="eyebrow" data-ru="Дополнения">Adaosuri</div>
+      <h2 data-ru="Что ещё можно добавить к бару.">Ce mai puteți adăuga la bar.</h2>
+    </div>
+
+    <div class="addons">
+      <article class="addon rv">
+        <div class="torta-pics">
+          <img class="a" src="assets/img/torta-1.jpg" alt="Torta de shoturi montată, cu toate etajele vizibile" loading="lazy" decoding="async">
+          <img class="b" src="assets/img/torta-2.jpg" alt="Torta de shoturi cu artificii, la eveniment" loading="lazy" decoding="async">
+          <div class="price-chip"><span class="v" id="tortaChipUnit">70 lei</span><span class="k" data-ru="За штуку">Unitatea</span></div>
+        </div>
+
+        <h3 data-ru="Торт из шотов">Torta de shoturi</h3>
+        <p><span data-ru="Этажерка с">Etajeră cu</span> <span id="tortaFlavors">4</span> <span data-ru="видов разных слабоалкогольных шотов, устанавливается у бара. Считается по">feluri de shoturi diferite, slab alcoolice, montată lângă bar. Se calculează</span> <span id="tortaUnitTxt">70 lei</span> <span data-ru="за штуку.">unitatea.</span></p>
 
         <div class="tier-list" id="tortaTiers"></div>
 
@@ -893,13 +920,26 @@ footer{background:var(--ink);padding:76px 0 36px;border-top:1px solid var(--line
           <div><span class="v" id="tortaStatUnit">70 lei</span><span class="k" data-ru="За штуку">Unitatea</span></div>
           <div><span class="v" data-ru="Слабый">Slab</span><span class="k" data-ru="Алкоголь">Alcoolice</span></div>
         </div>
-      </div>
+      </article>
 
-      <div class="torta-pics rv">
-        <img class="a" src="assets/img/torta-1.jpg" alt="Torta de shoturi montată, cu toate etajele vizibile" decoding="async">
-        <img class="b" src="assets/img/torta-2.jpg" alt="Torta de shoturi cu artificii, la eveniment" decoding="async">
-        <div class="price-chip"><span class="v" id="tortaChipUnit">70 lei</span><span class="k" data-ru="За штуку">Unitatea</span></div>
-      </div>
+      <article class="addon rv">
+        <div class="torta-pics">
+          <img class="a" src="assets/img/piramida-2.jpg" alt="Piramidă din pahare de spumant, montată la eveniment" loading="lazy" decoding="async">
+          <img class="b" src="assets/img/piramida-1.jpg" alt="Mirii toarnă spumant în piramida de pahare" loading="lazy" decoding="async">
+          <div class="price-chip"><span class="v" id="pirChipFrom">2 000 lei</span><span class="k" data-ru="От">De la</span></div>
+        </div>
+
+        <h3 data-ru="Пирамида из шампанского">Piramida din spumant</h3>
+        <p data-ru="Пирамида-треугольник из бокалов, собирается на месте. Шампанское в цену не входит.">Piramidă triunghi din pahare, montată la fața locului. Spumantul nu intră în preț.</p>
+
+        <div class="tier-list" id="piramidaTiers"></div>
+
+        <div class="torta-stats">
+          <div><span class="v" id="pirStatEtaje">5-7</span><span class="k" data-ru="Этажей">Etaje</span></div>
+          <div><span class="v" id="pirStatPahare">84</span><span class="k" data-ru="Бокалов, максимум">Pahare, maxim</span></div>
+          <div><span class="v" data-ru="Отдельно">Separat</span><span class="k" data-ru="Шампанское">Spumantul</span></div>
+        </div>
+      </article>
     </div>
   </div>
 </section>
@@ -1013,6 +1053,11 @@ const TORTA_FALLBACK={unitPrice:70,flavors:4,tiers:[
   {qty:171,price:12000,label:"Pentru evenimente medii"},
   {qty:200,price:14000,label:"Pentru evenimente mari"}
 ]};
+const PIRAMIDA_FALLBACK={tiers:[
+  {etaje:5,pahare:35,price:2000},
+  {etaje:6,pahare:56,price:2400},
+  {etaje:7,pahare:84,price:2800}
+]};
 const PRICING_FALLBACK={perUnit:80,rezervaUnitar:85,avans:2000,kmFee:10};
 const GAL_FALLBACK=[
  ["gal-01","Cocktailuri servite, grădină"],
@@ -1025,7 +1070,7 @@ const GAL_FALLBACK=[
  ["gal-08","Cocktailuri cu fructe de pădure"],
  ["gal-09","Cupe cu portocală și căpșuni"]
 ];
-let OFFERS=OFFERS_FALLBACK, TORTA=TORTA_FALLBACK, PRICING=PRICING_FALLBACK, GAL=GAL_FALLBACK;
+let OFFERS=OFFERS_FALLBACK, TORTA=TORTA_FALLBACK, PIRAMIDA=PIRAMIDA_FALLBACK, PRICING=PRICING_FALLBACK, GAL=GAL_FALLBACK;
 
 /* ---------- limba: RO/RU pentru textul static + textul generat dinamic in JS ----------
    textul din Supabase (cocktailuri, poze, etichete torta) NU se traduce - ramane cum il scrie clienta */
@@ -1041,6 +1086,8 @@ const T={
     ru:"Включает доставку, инвентарь, стеклянную посуду, барменов и шоу флейринг."},
   deShoturi:{ro:"de shoturi",ru:"шотов"},
   tortaDeShoturi:{ro:"Torta de shoturi",ru:"Торт из шотов"},
+  etaje:{ro:"etaje",ru:"этажей"}, pahare:{ro:"pahare",ru:"бокалов"},
+  piramida:{ro:"Piramida din spumant",ru:"Пирамида из шампанского"},
   ofertaNr:n=>LANG==="ru"?`Предложение №${n}`:`Oferta №${n}`,
   ofertaComanda:{ro:"Ofertă la comandă",ru:"Индивидуальное предложение"},
   cocktailuriPeste:qty=>LANG==="ru"?`${qty} коктейлей, сверх стандартных предложений`:`${qty} cocktailuri, peste ofertele standard`,
@@ -1062,7 +1109,7 @@ function setLang(l){
   });
   const btn=document.getElementById("langBtn");
   if(btn) btn.textContent = l==="ro" ? "RU" : "RO";
-  renderOffers(); renderTorta(); renderPricingBits();
+  renderOffers(); renderTorta(); renderPiramida(); renderPirPills(); renderPricingBits();
   renderDots(); apply(); calc(); checkVids();
 }
 
@@ -1105,6 +1152,18 @@ function renderTorta(){
   F("tortaChipUnit").textContent=lei(TORTA.unitPrice);
 }
 renderTorta();
+
+/* ---------- piramida din spumant: praguri pe etaje ---------- */
+function renderPiramida(){
+  const t=PIRAMIDA.tiers;
+  F("piramidaTiers").innerHTML=t.map(p=>
+    `<div class="tier"><div class="l"><span>${p.etaje} ${L("etaje")}</span><em>${p.pahare} ${L("pahare")}</em></div><b>${lei(p.price)}</b></div>`
+  ).join("");
+  F("pirChipFrom").textContent=lei(Math.min(...t.map(p=>p.price)));
+  F("pirStatEtaje").textContent=`${Math.min(...t.map(p=>p.etaje))}-${Math.max(...t.map(p=>p.etaje))}`;
+  F("pirStatPahare").textContent=Math.max(...t.map(p=>p.pahare));
+}
+renderPiramida();
 
 /* ---------- galerie: randare din GAL, poate fi inlocuita din Supabase ----------
    fiecare intrare e fie un nume local (assets/img/gal/<nume>.jpg), fie un URL complet
@@ -1156,7 +1215,8 @@ track.addEventListener("touchend",e=>{
 },{passive:true});
 
 /* ---------- configurator ---------- */
-let guests=60, hours=5, drinks=5, drinksTouched=false, wantTorta=false, tortaShots=100, evType="Nuntă", userTouched=false;
+let guests=60, hours=5, drinks=5, drinksTouched=false, wantTorta=false, tortaShots=100,
+    wantPir=false, pirEtaje=5, evType="Nuntă", userTouched=false;
 const suggestDrinks=h=>h<=4?3.5:h<=6?5:6.5;
 
 function calc(){
@@ -1186,6 +1246,15 @@ function calc(){
     F("rTorta").textContent=lei(tortaPrice);
     total+=tortaPrice;
   } else F("rowTorta").style.display="none";
+
+  const pirT=PIRAMIDA.tiers.find(p=>p.etaje===pirEtaje)||PIRAMIDA.tiers[0];
+  if(wantPir){
+    F("rowPir").style.display="";
+    F("rPirLbl").textContent=`${L("piramida")} (${pirT.etaje} ${L("etaje")})`;
+    F("rPir").textContent=lei(pirT.price);
+    total+=pirT.price;
+  } else F("rowPir").style.display="none";
+
   F("rTotal").textContent=lei(total);
   F("rFine").innerHTML=T.fineOffer(lei(PRICING.avans));
 
@@ -1193,7 +1262,7 @@ function calc(){
   /* caruselul sare la oferta potrivita doar dupa ce clientul misca ceva, nu la incarcare */
   if(o&&userTouched){ const p=OFFERS.findIndex(x=>x.n===o.n); if(p<idx||p>idx+perView()-1) go(Math.min(p,maxIdx())); }
 
-  window.__sel={offer:o,need,total,torta:wantTorta,tortaShots};
+  window.__sel={offer:o,need,total,torta:wantTorta,tortaShots,pir:wantPir,pirEtaje:pirT.etaje,pirPahare:pirT.pahare};
   buildMsg();
 }
 
@@ -1212,6 +1281,23 @@ F("tortaChk").addEventListener("change",e=>{
 F("tortaShots").addEventListener("input",e=>{
   userTouched=true; tortaShots=+e.target.value; F("tsN").textContent=tortaShots; calc();
 });
+
+/* piramida: bifa + alegerea numarului de etaje (pastile, ca la tipul evenimentului) */
+function renderPirPills(){
+  F("pirEtaje").innerHTML=PIRAMIDA.tiers.map(p=>`
+    <label class="pill"><input type="radio" name="pir" value="${p.etaje}"${p.etaje===pirEtaje?" checked":""}>
+    <span>${p.etaje} ${L("etaje")}</span></label>`).join("");
+}
+renderPirPills();
+F("pirChk").addEventListener("change",e=>{
+  userTouched=true; wantPir=e.target.checked;
+  F("pirQtyBlk").style.display=wantPir?"":"none";
+  calc();
+});
+F("pirEtaje").addEventListener("change",e=>{
+  if(e.target.name!=="pir") return;
+  userTouched=true; pirEtaje=+e.target.value; calc();
+});
 F("evType").addEventListener("change",e=>{ if(e.target.name==="evt"){ evType=e.target.value; buildMsg(); }});
 
 /* ---------- mesajul pre-completat ---------- */
@@ -1228,7 +1314,11 @@ function buildMsg(){
   if(venue) t+=`Locația: ${venue}.\n`;
   t+=`\n`;
   if(s.need) t+=`Pe site mi-au ieșit ${s.need} cocktailuri`;
-  if(s.need) t+=(s.torta?`, plus torta de shoturi (${s.tortaShots} buc)`:``)+`, în jur de ${lei(s.total)}.\n\n`;
+  if(s.need){
+    if(s.torta) t+=`, plus torta de shoturi (${s.tortaShots} buc)`;
+    if(s.pir) t+=`, plus piramida din spumant (${s.pirEtaje} etaje, ${s.pirPahare} pahare)`;
+    t+=`, în jur de ${lei(s.total)}.\n\n`;
+  }
   if(extra) t+=extra+"\n\n";
   t+=`Data este liberă?`;
   if(name||phone) t+=`\n\n${name}${name&&phone?" / ":""}${phone}`;
@@ -1405,10 +1495,11 @@ addEventListener("resize",checkVids);
     const c=data.data;
     if(c.offers && c.offers.length) OFFERS=c.offers;
     if(c.torta) TORTA=c.torta;
+    if(c.piramida && c.piramida.tiers && c.piramida.tiers.length) PIRAMIDA=c.piramida;
     if(c.pricing) PRICING=c.pricing;
     if(c.gallery && c.gallery.length) GAL=c.gallery.map(g=>[g.file,g.caption]);
 
-    renderOffers(); renderTorta(); renderGallery(); renderPricingBits();
+    renderOffers(); renderTorta(); renderPiramida(); renderPirPills(); renderGallery(); renderPricingBits();
     renderDots(); apply(); calc(); checkVids();
   }catch(e){ /* ramane fallback-ul local de mai sus, site-ul nu se strica */ }
 })();

@@ -185,6 +185,10 @@ button{font-family:inherit;cursor:pointer;border:0;transition:.25s var(--ease)}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 21h16M5 21v-6a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v6M9 12V8a3 3 0 0 1 6 0v4M12 5V3"/></svg>
           <span>Torta de shoturi</span>
         </button>
+        <button data-t="piramida" title="Piramida din spumant">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3 4 20h16L12 3z"/><path d="M8.2 12h7.6M6.1 16h11.8"/></svg>
+          <span>Piramida</span>
+        </button>
         <button data-t="preturi" title="Prețuri">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v20M17 6H9.5a3 3 0 0 0 0 6h5a3 3 0 0 1 0 6H6"/></svg>
           <span>Prețuri</span>
@@ -218,6 +222,15 @@ button{font-family:inherit;cursor:pointer;border:0;transition:.25s var(--ease)}
               <div><label>Nr. feluri de shoturi</label><input id="tFlavors" type="number"></div>
             </div>
             <div style="margin-top:18px" id="tortaTiersEdit"></div>
+          </div>
+        </div>
+
+        <div class="pane" id="pane-piramida">
+          <div class="page-head"><div class="eyebrow">Cabinet</div><h2>Piramida din spumant</h2></div>
+          <p class="hint">Variantele de piramidă din pahare. Spumantul nu intră în preț.</p>
+          <div class="card">
+            <div id="pirTiersEdit"></div>
+            <button class="btn-ghost" id="addPirTier" style="width:100%;margin-top:6px">+ Adaugă variantă</button>
           </div>
         </div>
 
@@ -289,9 +302,17 @@ async function boot(){
   }
   state=data.data;
   state.pricing=state.pricing||{};
+  /* piramida a fost adaugata mai tarziu: daca lipseste in baza, pornim de la variantele standard */
+  if(!state.piramida || !state.piramida.tiers || !state.piramida.tiers.length){
+    state.piramida={tiers:[
+      {etaje:5,pahare:35,price:2000},
+      {etaje:6,pahare:56,price:2400},
+      {etaje:7,pahare:84,price:2800}
+    ]};
+  }
   document.getElementById("login").style.display="none";
   document.getElementById("app").style.display="block";
-  renderOffers(); renderTorta(); renderPricing(); renderGallery();
+  renderOffers(); renderTorta(); renderPiramida(); renderPricing(); renderGallery();
 }
 
 /* ---------- tab-uri ---------- */
@@ -385,6 +406,32 @@ function renderTorta(){
     row.querySelector('[data-f="label"]').oninput=e=>state.torta.tiers[i].label=e.target.value;
   });
 }
+
+/* ---------- piramida din spumant ---------- */
+function renderPiramida(){
+  F("pirTiersEdit").innerHTML=state.piramida.tiers.map((p,i)=>`
+    <div class="tier-row" data-i="${i}" style="grid-template-columns:1fr 1fr 1fr 34px">
+      <div><label>Etaje</label><input type="number" data-f="etaje" value="${p.etaje}"></div>
+      <div><label>Pahare</label><input type="number" data-f="pahare" value="${p.pahare}"></div>
+      <div><label>Preț (lei)</label><input type="number" data-f="price" value="${p.price}"></div>
+      <div><label>&nbsp;</label><button class="rm" data-rm-pir>×</button></div>
+    </div>`).join("");
+  F("pirTiersEdit").querySelectorAll(".tier-row").forEach(row=>{
+    const i=+row.dataset.i;
+    row.querySelector('[data-f="etaje"]').oninput=e=>state.piramida.tiers[i].etaje=+e.target.value||0;
+    row.querySelector('[data-f="pahare"]').oninput=e=>state.piramida.tiers[i].pahare=+e.target.value||0;
+    row.querySelector('[data-f="price"]').oninput=e=>state.piramida.tiers[i].price=+e.target.value||0;
+    row.querySelector("[data-rm-pir]").onclick=()=>{
+      if(!confirm("Ștergi varianta asta de piramidă?")) return;
+      state.piramida.tiers.splice(i,1); renderPiramida();
+    };
+  });
+}
+F("addPirTier").onclick=()=>{
+  const last=state.piramida.tiers[state.piramida.tiers.length-1];
+  state.piramida.tiers.push({etaje:(last?last.etaje+1:5),pahare:(last?last.pahare:35),price:(last?last.price:2000)});
+  renderPiramida();
+};
 
 /* ---------- preturi ---------- */
 function renderPricing(){
